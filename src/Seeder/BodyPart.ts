@@ -37,7 +37,7 @@ export const bodyPart = [
     },
     {
         id:"neck",
-        name: "Neck",
+        name: "neck",
         data: neck
     },
     {
