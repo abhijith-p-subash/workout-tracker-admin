@@ -1,0 +1,19 @@
+.allwrkout{
+    background-color: rgb(194, 194, 194);
+}
+
+.wrk-root{
+    width: 100%;
+    height: 100%;
+}
+
+.wrk{
+  height: 31rem;
+  width: 100%;  
+  overflow-y: auto;
+}
+.t1{
+    width: 100%;
+    padding-top: 7px;
+}
+
