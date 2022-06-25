@@ -1,23 +1,22 @@
-import React from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import NavBar from './Components/AppBar/NavBar';
-import Home from './Pages/Home/Home';
-
-import './App.css';
+import AuthGuard from "./Util/AuthGuard";
+import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login";
+import "./App.css";
 
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <NavBar />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route element={<AuthGuard />}>
+            <Route  path="/" element={<Home />} />
+            <Route  path="/home" element={<Home />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </div>

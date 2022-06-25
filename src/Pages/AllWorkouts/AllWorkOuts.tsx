@@ -1,24 +1,21 @@
 import React, { useState } from "react";
 import {
-  Backdrop,
   Box,
   Button,
   Card,
   CardContent,
-  CircularProgress,
   Grid,
   List,
   ListItemButton,
   ListItemText,
-  Paper,
-  styled,
   Typography,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+import BackDrop from "../../Components/BackDrop/BackDrop";
 import { bodyPart } from "../../Seeder/BodyPart";
-import { BodyPart, Filter, Res, WorkOut } from "../../Models/Models";
+import { Filter, Res,  } from "../../Models/Models";
 import { capitalize } from "../../Util/Util";
 import { createDoc, getWithQuery } from "../../firebase/FireBase-services";
 
@@ -41,9 +38,6 @@ const AllWorkOuts = () => {
     colour: "success",
   });
 
-  // const handleClickAlert = () => {
-  //   setOpenAlert(true);
-  // };
 
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
@@ -113,12 +107,13 @@ const AllWorkOuts = () => {
   return (
     <div style={{ marginTop: 35 }}>
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKDROP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={openBackDrop}
       >
         <CircularProgress color="inherit" />
-      </Backdrop>
+      </Backdrop> */}
+      <BackDrop open={openBackDrop}/>
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKDROP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
 
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SNACKBAR >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}

@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import {
-  Backdrop,
   Box,
   Button,
   Card,
   CardContent,
-  CircularProgress,
   Grid,
   List,
   ListItemButton,
   ListItemText,
-  Paper,
-  styled,
   Typography,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
+import BackDrop from "../../Components/BackDrop/BackDrop";
 import { bodyPart } from "../../Seeder/BodyPart";
-import { BodyPart, Filter, Res, WorkOut } from "../../Models/Models";
+import {  Filter, Res, } from "../../Models/Models";
 import { capitalize } from "../../Util/Util";
-import { createDoc, getWithQuery } from "../../firebase/FireBase-services";
+import {
+  deleteOne,
+  getWithQuery,
+} from "../../firebase/FireBase-services";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -45,9 +45,9 @@ const SavedWorkOuts = () => {
   //   setOpenAlert(true);
   // };
 
-  useEffect(()=>{
-    openWrkOuts(bodyPart[0])
-  },[]);
+  useEffect(() => {
+    openWrkOuts(bodyPart[0]);
+  }, []);
 
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
@@ -78,14 +78,11 @@ const SavedWorkOuts = () => {
 
   const openWrkOuts = async (data: any) => {
     try {
-      console.log(data);
-
       setOpenBackDrop(true);
       let filter: Filter[] = [
         { field: "bodyPart", operator: "==", value: data.name },
       ];
       const res: Res = await getWithQuery("exercises", filter);
-      console.log(res);
 
       await setWrkOut({
         id: data.id,
@@ -116,39 +113,29 @@ const SavedWorkOuts = () => {
     setOpenBackDrop(false);
   };
 
-  const AddWorkOut = async (param: any) => {
-    // setOpenBackDrop(true);
-    // let filter: Filter[] = [{ field: "id", operator: "==", value: param.id }];
-    // const getData: Res = await getWithQuery("exercises", filter);
-    // if (getData.data.length > 0) {
-    //   setOpenBackDrop(false);
-    //   setOpenAlert({
-    //     ctrl: true,
-    //     colour: "error",
-    //     msg: "Already Work Out Added",
-    //   });
-    // } else {
-    //   const res: Res = await createDoc("exercises", param);
-    //   if (res.error) {
-    //     const err = JSON.parse(JSON.stringify(res.data));
-    //     setOpenBackDrop(false);
-    //     setOpenAlert({ ctrl: true, colour: "error", msg: err });
-    //   } else {
-    //     setOpenBackDrop(false);
-    //     setOpenAlert({ ctrl: true, colour: "success", msg: "WorkOut Added" });
-    //   }
-    // }
+  const RemoveWorkOut = async (param: any) => {
+    setOpenBackDrop(true);
+    const res: Res = await deleteOne("exercises", param.id);
+    setOpenBackDrop(false);
+    if (res.error) {
+      const err = JSON.parse(JSON.stringify(res.data));
+      setOpenBackDrop(false);
+      setOpenAlert({
+        ctrl: true,
+        colour: "error",
+        msg: err,
+      });
+    } else {
+      openWrkOuts(wrkOut);
+      setOpenBackDrop(false);
+      setOpenAlert({ ctrl: true, colour: "success", msg: "WorkOut Removed" });
+    }
   };
 
   return (
     <div style={{ marginTop: 35 }}>
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKDROP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={openBackDrop}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      <BackDrop open={openBackDrop}/>
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< BACKDROP >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
 
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SNACKBAR >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
@@ -275,7 +262,7 @@ const SavedWorkOuts = () => {
                       disabled={wrkOutDetails.name === "No Data"}
                       variant="contained"
                       onClick={() => {
-                        AddWorkOut(wrkOutDetails);
+                        RemoveWorkOut(wrkOutDetails);
                       }}
                     >
                       REMOVE

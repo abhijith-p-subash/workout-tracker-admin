@@ -16,12 +16,10 @@ import {
   query,
   where,
   QueryConstraint,
-  orderBy,
-  startAt, endAt,
 } from "firebase/firestore";
 import { Filter, GeneralData } from "../Models/Models";
 
-export const Login = async (Email: string, Password: any) => {
+export const LogIn = async (Email: string, Password: string) => {
   try {
     const res = await signInWithEmailAndPassword(auth, Email, Password);
     return res;
