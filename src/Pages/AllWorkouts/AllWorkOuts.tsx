@@ -147,7 +147,7 @@ const AllWorkOuts = () => {
         </Snackbar>
       )}
       {/* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SNACKBAR >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> */}
-      <Card sx={{ minWidth: 300, maxHeight: 900 }}>
+      <Card sx={{ minWidth: 300 }}>
         <CardContent>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={1}>
