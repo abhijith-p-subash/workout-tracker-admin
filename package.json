@@ -17,6 +17,7 @@
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "env-cmd": "^10.1.0",
+    "file-saver": "^2.0.5",
     "firebase": "^9.8.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -26,7 +27,6 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-  
     "start": "env-cmd -f .env react-scripts start",
     "build": "env-cmd -f .env react-scripts build",
     "test": "react-scripts test",
@@ -49,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.5"
   }
 }

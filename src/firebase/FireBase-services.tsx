@@ -1,4 +1,4 @@
-import { auth, db } from "./FireBase-config";
+import { auth, db, storage } from "./FireBase-config";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -17,6 +17,7 @@ import {
   where,
   QueryConstraint,
 } from "firebase/firestore";
+import {ref, uploadBytes, uploadBytesResumable, getDownloadURL} from "firebase/storage"
 import { Filter, GeneralData } from "../Models/Models";
 
 export const LogIn = async (Email: string, Password: string) => {
@@ -145,3 +146,15 @@ export const deleteOne = async (collectionName: string, id: string) => {
     return { data: error, error: true };
   }
 };
+
+
+export const fileUpload = async (folderName:string, fileName:string, file:any)=>{
+  try {
+    const fileRef = ref(storage, `${folderName}/${fileName}`),
+      res = await uploadBytesResumable(fileRef, file),
+      URL = await getDownloadURL(fileRef);
+    return { data: URL, error: false };
+  } catch (error) {
+    return { data: error, error: true };
+  }
+}

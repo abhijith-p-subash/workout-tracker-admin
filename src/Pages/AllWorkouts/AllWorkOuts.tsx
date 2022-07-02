@@ -17,7 +17,8 @@ import BackDrop from "../../Components/BackDrop/BackDrop";
 import { bodyPart } from "../../Seeder/BodyPart";
 import { Filter, Res,  } from "../../Models/Models";
 import { capitalize } from "../../Util/Util";
-import { createDoc, getWithQuery } from "../../firebase/FireBase-services";
+import { createDoc, getWithQuery, fileUpload} from "../../firebase/FireBase-services";
+// import {saveAs} from "file-saver"
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -37,6 +38,7 @@ const AllWorkOuts = () => {
     msg: "",
     colour: "success",
   });
+  const [imgUpload, setImgUpload] = useState<any>(null)
 
 
   const handleCloseAlert = (
@@ -82,6 +84,30 @@ const AllWorkOuts = () => {
 
   const AddWorkOut = async (param: any) => {
     setOpenBackDrop(true);
+
+    if(imgUpload === null){
+      setOpenBackDrop(false);
+      setOpenAlert({
+        ctrl: true,
+        colour: "info",
+        msg: "select gif file",
+      });
+      return
+    };
+
+    const upload = await fileUpload('wrkoutImg', imgUpload[0].name, imgUpload[0]);
+    setImgUpload(null);
+    if(upload.error){
+      setOpenBackDrop(false);
+      setOpenAlert({
+        ctrl: true,
+        colour: "error",
+        msg: "upload failed",
+      });
+      return;
+    }
+      
+    
     let filter: Filter[] = [{ field: "id", operator: "==", value: param.id }];
     const getData: Res = await getWithQuery("exercises", filter);
     if (getData.data.length > 0) {
@@ -92,6 +118,7 @@ const AllWorkOuts = () => {
         msg: "Already Work Out Added",
       });
     } else {
+      param.url = upload.data;
       const res: Res = await createDoc("exercises", param);
       if (res.error) {
         const err = JSON.parse(JSON.stringify(res.data));
@@ -103,6 +130,13 @@ const AllWorkOuts = () => {
       }
     }
   };
+
+  // const saveFile = async (param:any) => {
+  //   await saveAs(
+  //     `${param.gifUrl}`,
+  //     `${param.id}.gif`
+  //   );
+  // };
 
   return (
     <div style={{ marginTop: 35 }}>
@@ -247,6 +281,19 @@ const AllWorkOuts = () => {
                   </Grid>
                   <Grid item xs={6} md={4}>
                     <Typography align="left" color="#8a8799">
+                      ID
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={8}>
+                    <Typography align="left">
+                      <span style={{ fontWeight: "bold" }}>
+                        {" "}
+                        {capitalize(wrkOutDetails.id)}
+                      </span>
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={4}>
+                    <Typography align="left" color="#8a8799">
                       Boby-Part
                     </Typography>
                   </Grid>
@@ -284,6 +331,15 @@ const AllWorkOuts = () => {
                       </span>
                     </Typography>
                   </Grid>
+                  <Grid item xs={6} md={4}>
+                    <Typography align="left" color="#8a8799">
+                      upload
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} md={8}>
+                   <input type="file" onChange={(event)=> setImgUpload(event.target.files)}/>
+                  </Grid>
+                  
                   <Grid
                     container
                     marginTop={4}
@@ -297,6 +353,7 @@ const AllWorkOuts = () => {
                       <img width={300} src={wrkOutDetails.gifUrl} alt="img" />
                     </Grid>
                   </Grid>
+                 
                 </Grid>
               </Grid>
             </Grid>
