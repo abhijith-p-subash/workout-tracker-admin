@@ -8,6 +8,7 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  TextField,
   Typography,
 } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
@@ -40,6 +41,7 @@ const SavedWorkOuts = () => {
     msg: "",
     colour: "success",
   });
+  const [searchText, setSearchText] = useState("");
 
   // const handleClickAlert = () => {
   //   setOpenAlert(true);
@@ -209,9 +211,29 @@ const SavedWorkOuts = () => {
                   WORK OUTS
                 </Typography>
                 <hr />
+                <div style={{margin:10}}>
+                <TextField value={searchText} onChange={(e)=>{setSearchText(e.target.value)}} id="outlined-basic" label="Search" variant="outlined" size="small" fullWidth/>
+                </div>
                 <List component="nav" aria-label="secondary mailbox folder">
                   <div className="wrk">
-                    {wrkOut.data.map((item, index) => (
+                    {wrkOut.data.
+                    filter((val) => {
+                      if (searchText === "") {
+                        return val;
+                      } else if (
+                        val.name
+                          .toLowerCase()
+                          .includes(searchText.toLowerCase())
+                      ) {
+                        return val;
+                      } else if (
+                        val.equipment
+                          .toLowerCase()
+                          .includes(searchText.toLowerCase())
+                      ) {
+                        return val;
+                      }
+                    }).map((item, index) => (
                       <ListItemButton
                         key={index}
                         selected={selectedIndexWrk === index}
